@@ -1,0 +1,22 @@
+[
+  {
+    "code" : "USER_NOT_FOUND",
+    "message" : "User is not available",
+    "httpStatus" : 404
+  },
+  {
+    "code" : "GENERIC_ERROR",
+    "message" : "There was problem while processing your request",
+    "httpStatus" : 500
+  },
+  {
+    "code" : "USER_CREATE_MISSING_PARAM",
+    "message" : "Missing mandatory params",
+    "httpStatus" : 400
+  },
+  {
+    "code" : "DUPLICATE_USER",
+    "message" : "User with mobile number already exists",
+    "httpStatus" : 422
+  }
+]

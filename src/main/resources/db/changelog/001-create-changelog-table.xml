@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="01" author="ravindra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="users"/>
+            </not>
+        </preConditions>
+        <comment>Adding database change logs</comment>
+        <sql>
+            CREATE TABLE `users` (
+            `id` bigint NOT NULL,
+            `age` int DEFAULT NULL,
+            `gender` smallint DEFAULT NULL,
+            `mobile` varchar(255) DEFAULT NULL,
+            `name` varchar(255) DEFAULT NULL,
+            PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        </sql>
+    </changeSet>
+    <changeSet id="02" author="ravindra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="users_seq"/>
+            </not>
+        </preConditions>
+        <comment>Adding users_seq</comment>
+        <sql>
+            CREATE TABLE `users_seq` (
+            `next_val` bigint DEFAULT NULL
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        </sql>
+    </changeSet>
+</databaseChangeLog>
