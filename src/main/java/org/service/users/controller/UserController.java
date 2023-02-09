@@ -25,10 +25,11 @@ public class UserController {
     private ErrorUtil errorUtil;
 
     @GetMapping(value = "/v1/users",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<GenericResponse<List<UserDetail>>> fetchAllUsers(){
+    public ResponseEntity<GenericResponse<List<UserDetail>>> fetchAllUsers(@RequestParam(name="page",defaultValue = "0") Integer page,
+                                                                           @RequestParam(name="pageSize",defaultValue = "20") Integer pageSize){
         GenericResponse<List<UserDetail>> response = new GenericResponse<>();
         try{
-            response.setData(userService.fetchAllUsers());
+            response.setData(userService.fetchAllUsers(page,pageSize));
             response.setSuccess(true);
             return new ResponseEntity<>(response, HttpStatus.OK);
         }catch(Exception e){

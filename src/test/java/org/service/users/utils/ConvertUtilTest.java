@@ -1,13 +1,14 @@
 package org.service.users.utils;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.service.users.contracts.UserDetail;
 import org.service.users.domain.UserEntity;
 import org.service.users.model.Gender;
-
+import org.springframework.test.context.junit4.SpringRunner;
 import static org.junit.jupiter.api.Assertions.*;
 
+@RunWith(SpringRunner.class)
 class ConvertUtilTest {
 
 

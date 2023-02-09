@@ -1,6 +1,5 @@
 package org.service.users.service;
 
-import jakarta.annotation.PostConstruct;
 import org.apache.commons.lang3.StringUtils;
 import org.service.users.contracts.UserDetail;
 import org.service.users.contracts.UserRequest;
@@ -13,10 +12,9 @@ import org.service.users.utils.ConvertUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-
 import java.util.*;
 
 @Component
@@ -27,10 +25,13 @@ public class UserService {
     @Autowired
     private UserRepository userRepo;
 
-    public List<UserDetail> fetchAllUsers(){
+    public List<UserDetail> fetchAllUsers(Integer pageNumber,Integer pageSize){
         List<UserDetail> users = new ArrayList<>();
-
-        for(UserEntity user: userRepo.findAll(PageRequest.of(0, 30))){
+        Page<UserEntity> page = userRepo.findAll(PageRequest.of(pageNumber, pageSize));
+        if(null==page || page.isEmpty()){
+            return users;
+        }
+        for(UserEntity user: page.getContent()){
                 users.add(ConvertUtil.toUserDetail(user));
         }
         return users;
@@ -48,7 +49,7 @@ public class UserService {
     public Boolean deleteUserById(Long id){
         logger.info("Request received for delete userId : {}",id);
         Optional<UserEntity> optionalUser = userRepo.findById(id);
-        if(!optionalUser.isPresent()){
+        if(null==optionalUser || !optionalUser.isPresent()){
             throw new ValidationException(ErrorCode.USER_NOT_FOUND.name());
         }
         userRepo.deleteUser(id);
@@ -74,6 +75,7 @@ public class UserService {
 
     private boolean isValidUserAddRequest(UserRequest request) {
         if (StringUtils.isBlank(request.getMobile()) ||
+                request.getMobile().length()!=10 ||
                 StringUtils.isBlank(request.getName()) ||
                 StringUtils.isBlank(request.getGender()) ||
                 null == request.getAge()) {

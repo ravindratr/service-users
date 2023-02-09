@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.service.users.contracts.UserDetail;
 import org.service.users.domain.UserEntity;
@@ -11,20 +12,23 @@ import org.service.users.exception.ValidationException;
 import org.service.users.model.Gender;
 import org.service.users.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit4.SpringRunner;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
+@ExtendWith({SpringExtension.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SpringBootTest
+@ContextConfiguration(classes = {UserRepository.class,UserService.class})
 class UserServiceTest {
 
     @MockBean
@@ -67,5 +71,19 @@ class UserServiceTest {
         ValidationException exception = Assertions.assertThrows(ValidationException.class,() -> {
             userService.fetchUserById(1L);});
         assertEquals("USER_NOT_FOUND",exception.getMessage());
+    }
+
+    @Test
+    public void TestFindAll_Successful() {
+        Page page = new PageImpl<>(List.of(ue));
+        when(userRepo.findAll(PageRequest.of(0, 30))).thenReturn(page);
+        assertEquals(List.of(userDetail),userService.fetchAllUsers(0,30));
+    }
+
+    @Test
+    public void TestFindAll_EmptyListSuccessful() {
+        Page page = new PageImpl<>(new ArrayList<>());
+        when(userRepo.findAll(PageRequest.of(0, 30))).thenReturn(page);
+        assertEquals(0,userService.fetchAllUsers(0,30).size());
     }
 }
