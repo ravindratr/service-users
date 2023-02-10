@@ -14,26 +14,13 @@
         <comment>Adding database change logs</comment>
         <sql>
             CREATE TABLE `users` (
-            `id` bigint NOT NULL,
+            `id` bigint NOT NULL AUTO_INCREMENT,
             `age` int DEFAULT NULL,
             `gender` smallint DEFAULT NULL,
             `mobile` varchar(255) DEFAULT NULL,
             `name` varchar(255) DEFAULT NULL,
             PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-        </sql>
-    </changeSet>
-    <changeSet id="02" author="ravindra">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="users_seq"/>
-            </not>
-        </preConditions>
-        <comment>Adding users_seq</comment>
-        <sql>
-            CREATE TABLE `users_seq` (
-            `next_val` bigint DEFAULT NULL
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            );
         </sql>
     </changeSet>
 </databaseChangeLog>

@@ -1,0 +1,10 @@
+{
+  "success": true,
+  "data": {
+    "id": 1,
+    "name": "Name",
+    "gender": "MALE",
+    "mobile": "9988776655",
+    "age": 10
+  }
+}
